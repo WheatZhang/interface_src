@@ -393,15 +393,20 @@ bool AmplTNLP::get_nlp_t_length(
    Index&          n
 )
 {
+   ASL_pfgh* asl = asl_;
+   DBG_ASSERT(asl);
+
    const Number* homo_begin =  suffix_handler_->GetNumberSuffixValues("homotopy_origin", AmplSuffixHandler::Variable_Source);
+   const Number* homo_end = suffix_handler_->GetNumberSuffixValues("homotopy_destination", AmplSuffixHandler::Variable_Source);
    Index n_t_full_var=0;
-   for ( Index i = 0; i < n; i++ )
+   for ( Index i = 0; i < n_var; i++ )
    {
-      if (homo_begin[i] != NULL) 
+      if (homo_begin[i] != homo_end[i]) 
       {
          n_t_full_var++;
       }
    }
+   // printf("n_t_full_var=%d\n", n_t_full_var);
    n = n_t_full_var;
    return true;
 }
@@ -411,22 +416,25 @@ bool AmplTNLP::get_homotopy_info(
    Number* t_dest
 )
 {
+   ASL_pfgh* asl = asl_;
+   DBG_ASSERT(asl);
+
    const Number* homo_begin =  suffix_handler_->GetNumberSuffixValues("homotopy_origin", AmplSuffixHandler::Variable_Source);
    const Number* homo_end = suffix_handler_->GetNumberSuffixValues("homotopy_destination", AmplSuffixHandler::Variable_Source);
    //test suffix interface
-   for ( Index i = 0; i < n; i++ )
+   for ( Index i = 0; i < n_var; i++ )
    {
       t_ori[i] = homo_begin[i];
       t_dest[i] = homo_end[i];
-      if (t_ori[i] == NULL) 
-      {
-         printf("i=%d, t_ori[i] == NULL\n", i);
-      }
-      else
-      {
-         printf("i=%d, t_ori[i]=%f\n", i, t_ori[i]);
-         printf("i=%d, t_dest[i]=%f\n", i, t_dest[i]);
-      }
+      // if (t_ori[i] == NULL) 
+      // {
+      //    printf("i=%d, t_ori[i] == NULL\n", i);
+      // }
+      // else
+      // {
+      //    printf("i=%d, t_ori[i]=%f\n", i, t_ori[i]);
+      //    printf("i=%d, t_dest[i]=%f\n", i, t_dest[i]);
+      // }
    }
    return true;
 }

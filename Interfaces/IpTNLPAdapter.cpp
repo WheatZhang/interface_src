@@ -1329,35 +1329,35 @@ bool TNLPAdapter::GetHomotopySpaces(
 )
 {
    Index n_full_t;
-   bool retval = tnlp_->get_nlp_t_length(n_full_t);
+   bool retval;
+   retval = tnlp_->get_nlp_t_length(n_full_t);
    ASSERT_EXCEPTION(retval, INVALID_TNLP, "get_nlp_t_length returned false");
    n_full_t_ = n_full_t;
 
    Number* t_ori = new Number[n_full_x_];
    Number* t_dest = new Number[n_full_x_];
 
-   bool retval = tnlp_->get_homotopy_info(t_ori, t_dest);
+   retval = tnlp_->get_homotopy_info(t_ori, t_dest);
    ASSERT_EXCEPTION(retval, INVALID_TNLP, "get_homotopy_info returned false in GetHomotopySpaces");
 
    Index n_t_var;
-   Index* x_t_map = new Index[n_full_x_-n_x_fixed_];
+   // x_t_map should be larger than size n_t. It's OK to have some room.
+   Index* x_t_map = new Index[n_full_x_];
 
    n_t_var = 0;
+   Index n_x_var = 0;
    if ( IsValid(P_x_full_x_) )
    {
-      for( Index i = 0; i < P_x_full_x_.NCols(); i++ )
+      for( Index i = 0; i < n_full_x_; i++ )
       {
          const Index& ipopt_idx = P_x_full_x_->CompressedPosIndices()[i];
          if (ipopt_idx >=0)
          {
-            if (t_ori[i] != NULL)
+            if (t_ori[i] != t_dest[i])
             {
-               if (t_dest[i] == NULL)
-               {
-                  ASSERT_EXCEPTION(retval, INVALID_TNLP, "homotopy origin and destination do not match");
-               }
-               x_t_map[ipopt_idx] = n_t_var;
+               x_t_map[n_t_var] = n_x_var;
                n_t_var++;
+               n_x_var++;
             }
          }
       }
@@ -1366,18 +1366,15 @@ bool TNLPAdapter::GetHomotopySpaces(
    {
       for( Index i = 0; i < n_full_x_; i++ )
       {
-         if (t_ori[i] != NULL)
+         if (t_ori[i] != t_dest[i])
          {
-            if (t_dest[i] == NULL)
-            {
-               ASSERT_EXCEPTION(retval, INVALID_TNLP, "homotopy origin and destination do not match");
-            }
-            x_t_map[ipopt_idx] = n_t_var;
+            x_t_map[n_t_var] = i;
             n_t_var++;
          }
       }
    }
    n_t_ = n_t_var;
+   // printf("n_t_=%d\n",n_t_);
    
    delete[] t_ori;
    t_ori = NULL;
@@ -1419,10 +1416,11 @@ bool TNLPAdapter::GetHomotopyInformation(
    const ExpansionMatrix* em_P_homo = static_cast<const ExpansionMatrix*>(&P_homo);
    DBG_ASSERT(dynamic_cast<const ExpansionMatrix*>(&P_homo));
 
+   Number* values;
    // homotopy origin
    DenseVector* dt_Ori = static_cast<DenseVector*>(&t_Ori);
    DBG_ASSERT(dynamic_cast<DenseVector*>(&t_Ori));
-   Number* values = dt_Ori->Values();
+   values = dt_Ori->Values();
    if( IsValid(P_x_full_x_) )
    {
       for( Index i = 0; i < P_homo.NCols(); i++ )
@@ -1446,7 +1444,7 @@ bool TNLPAdapter::GetHomotopyInformation(
    // homotopy destination
    DenseVector* dt_Dest = static_cast<DenseVector*>(&t_Dest);
    DBG_ASSERT(dynamic_cast<DenseVector*>(&t_Dest));
-   Number* values = dt_Dest->Values();
+   values = dt_Dest->Values();
    if( IsValid(P_x_full_x_) )
    {
       for( Index i = 0; i < P_homo.NCols(); i++ )
