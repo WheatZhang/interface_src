@@ -50,6 +50,8 @@ IpoptCalculatedQuantities::IpoptCalculatedQuantities(
      grad_kappa_times_damping_x_cache_(1),
      grad_kappa_times_damping_s_cache_(1),
 
+     curr_t_cache_(1),
+
      curr_c_cache_(1),
      trial_c_cache_(2),
      curr_d_cache_(1),
@@ -1091,6 +1093,26 @@ void IpoptCalculatedQuantities::ComputeDampingIndicators(
    dampind_s_U = ConstPtr(dampind_s_U_);
 }
 
+// zhangduo added
+///////////////////////////////////////////////////////////////////////////
+//                                Homotopy                               //
+///////////////////////////////////////////////////////////////////////////
+
+SmartPtr<const Vector> IpoptCalculatedQuantities::curr_t()
+{
+   DBG_START_METH("IpoptCalculatedQuantities::curr_t()",
+                  dbg_verbosity);
+   SmartPtr<const Vector> result;
+   SmartPtr<const Vector> x = ip_data_->curr()->x();
+
+   if( !curr_t_cache_.GetCachedResult1Dep(result, *x) )
+   {
+      result = ip_nlp_->t(*x);
+      curr_t_cache_.AddCachedResult1Dep(result, *x);
+   }
+   return result;
+}
+// zhangduo added ends
 ///////////////////////////////////////////////////////////////////////////
 //                                Constraints                            //
 ///////////////////////////////////////////////////////////////////////////

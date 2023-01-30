@@ -104,6 +104,14 @@ public:
 
    /** Accessor methods for model data */
    ///@{
+   // zhangduo added
+   virtual SmartPtr<const Vector> t(
+      const Vector& x
+   )
+   {
+      return NULL;
+   }
+   // zhangduo added ends
    /** Objective value */
    virtual Number f(
       const Vector& x

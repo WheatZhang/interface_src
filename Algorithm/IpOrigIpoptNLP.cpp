@@ -588,6 +588,20 @@ SmartPtr<const Vector> OrigIpoptNLP::grad_f(
    return NULL;
 }
 
+// zhangduo added
+SmartPtr<const Vector> OrigIpoptNLP::t(
+   const Vector& x
+)
+{
+   // TODO: add caches
+   SmartPtr<Vector> retValue = curr_t_dest_space_->MakeNew();
+   P_homo_->TransMultVector(1.0, x, 0.0, *retValue);
+
+   return retValue;
+}
+
+// zhangduo added ends
+
 SmartPtr<const Vector> OrigIpoptNLP::c(
    const Vector& x
 )

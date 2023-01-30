@@ -198,6 +198,9 @@ public:
    /** Gradient of the damping term with respect to s (times kappa_d) */
    SmartPtr<const Vector> grad_kappa_times_damping_s();
    ///@}
+   // zhangduo added
+   SmartPtr<const Vector> curr_t();
+   // zhangduo added ends
 
    /** @name Constraints */
    ///@{
@@ -771,6 +774,9 @@ private:
    CachedResults<SmartPtr<const Vector> > grad_kappa_times_damping_x_cache_;
    CachedResults<SmartPtr<const Vector> > grad_kappa_times_damping_s_cache_;
    ///@}
+   // zhangduo added
+   CachedResults<SmartPtr<const Vector> > curr_t_cache_;
+   // zhangduo added ends
 
    /** @name Caches for constraint stuff */
    ///@{

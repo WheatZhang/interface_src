@@ -337,6 +337,12 @@ SolverReturn IpoptAlgorithm::Optimize(
          IpData().TimingStats().PrintProblemStatistics().End();
       }
 
+      // zhangduo added
+      // do test
+      printf("test curr_t.\n");
+      IpCq().curr_t()->Print(Jnlst(), J_SUMMARY, J_HOMOTOPY, "curr_t");
+      // zhangduo added ends
+
       IpData().TimingStats().CheckConvergence().Start();
       ConvergenceCheck::ConvergenceStatus conv_status = conv_check_->CheckConvergence();
       IpData().TimingStats().CheckConvergence().End();
@@ -354,6 +360,11 @@ SolverReturn IpoptAlgorithm::Optimize(
          OutputIteration();
          IpData().ResetInfo();
          IpData().TimingStats().OutputIteration().End();
+
+         // zhangduo added
+         // do test
+         IpCq().curr_t()->Print(Jnlst(), J_SUMMARY, J_HOMOTOPY, "curr_t");
+         // zhangduo added ends
 
          // initialize the flag that is set to true if the algorithm
          // has to continue with an emergency fallback mode.  For
