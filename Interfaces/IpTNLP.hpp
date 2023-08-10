@@ -107,7 +107,7 @@ public:
 
    // zhangduo added
    virtual bool get_nlp_t_length(
-      Index&          n
+      Index&          n_t
    )
    {
       return false;

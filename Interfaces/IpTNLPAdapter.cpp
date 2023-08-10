@@ -1321,6 +1321,7 @@ bool TNLPAdapter::GetSpaces(
    return true;
 }
 
+// zhangduo added
 bool TNLPAdapter::GetHomotopySpaces(
    SmartPtr<const VectorSpace>&    curr_t_dest_space,
    SmartPtr<const MatrixSpace>&    p_homo_space,
@@ -1472,6 +1473,7 @@ bool TNLPAdapter::GetHomotopyInformation(
 
    return true;
 }
+// zhangduo added ends
 
 bool TNLPAdapter::GetBoundsInformation(
    const Matrix& Px_L,

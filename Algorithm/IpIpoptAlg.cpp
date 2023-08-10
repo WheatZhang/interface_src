@@ -337,12 +337,6 @@ SolverReturn IpoptAlgorithm::Optimize(
          IpData().TimingStats().PrintProblemStatistics().End();
       }
 
-      // zhangduo added
-      // do test
-      printf("test curr_t.\n");
-      IpCq().curr_t()->Print(Jnlst(), J_SUMMARY, J_HOMOTOPY, "curr_t");
-      // zhangduo added ends
-
       IpData().TimingStats().CheckConvergence().Start();
       ConvergenceCheck::ConvergenceStatus conv_status = conv_check_->CheckConvergence();
       IpData().TimingStats().CheckConvergence().End();

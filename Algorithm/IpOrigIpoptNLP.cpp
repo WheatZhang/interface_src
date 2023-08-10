@@ -588,7 +588,7 @@ SmartPtr<const Vector> OrigIpoptNLP::grad_f(
    return NULL;
 }
 
-// zhangduo added
+//  added
 SmartPtr<const Vector> OrigIpoptNLP::t(
    const Vector& x
 )

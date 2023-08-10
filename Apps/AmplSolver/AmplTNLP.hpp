@@ -372,7 +372,7 @@ public:
 
    // zhangduo added
    virtual bool get_nlp_t_length(
-      Index&          n
+      Index&          n_t
    );
 
    virtual bool get_homotopy_info(
